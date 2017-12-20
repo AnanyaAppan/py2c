@@ -159,19 +159,41 @@ def convert(line):
 					newLine += 'printf("%s ",'+str(printLine[:-1])+');\n'
 
 	elif 'input' in line:
-		l = line.split('(raw_input())')
-		var_name = l[0][0]
-		print var_name
-		type = l[0][1:].split('=')[-1].strip()
-		if type == 'str':
-			newLine += 'char '+str(var_name)+'[100];\n  '
-			newLine += 'scanf("%s",&'+str(var_name)+');\n'
-		if type == 'int':
-			newLine += 'int '+str(var_name)+';\n  '
-			newLine += 'scanf("%d",&'+str(var_name)+');\n'
-		if type == 'float':
-			newLine += 'float '+str(var_name)+';\n  '
-			newLine += 'scanf("%f",&'+str(var_name)+');\n'
+		if 'map' in line:
+			var_name = ''.join(line.split(',raw_input()')).split('=')[0].strip()
+			type = line.split(',raw_input()')[0].split('map(')[-1]
+			if type == 'str':
+				newLine += 'char '+str(var_name)+'[100];\n'
+				newLine += '  int i=0;\n'
+				newLine += '  while(1)\n  '
+				newLine += '{\n  scanf("%c",&'+str(var_name)+'[i]);\n'
+				newLine += "  i++;\n  if(getchar()=='\\n') break;\n  }\n"
+			if type == 'int':
+				newLine += 'int '+str(var_name)+'[100];\n'
+				newLine += '  int i=0;\n'
+				newLine += '  while(1)\n  '
+				newLine += '{\n  scanf("%d",&'+str(var_name)+'[i]);\n'
+				newLine += "  i++;\n  if(getchar()=='\\n') break;\n  }\n"
+			if type == 'float':
+				newLine += 'float '+str(var_name)+'[100];\n'
+				newLine += '  int i=0;\n'
+				newLine += '  while(1)\n  '
+				newLine += '{\n  scanf("%f",&'+str(var_name)+'[i]);\n'
+				newLine += "  i++;\n  if(getchar()=='\\n') break;\n  }\n"
+		else:
+			l = line.split('(raw_input())')
+			var_name = l[0][0]
+			print var_name
+			type = l[0][1:].split('=')[-1].strip()
+			if type == 'str':
+				newLine += 'char '+str(var_name)+'[100];\n  '
+				newLine += 'scanf("%s",&'+str(var_name)+');\n'
+			if type == 'int':
+				newLine += 'int '+str(var_name)+';\n  '
+				newLine += 'scanf("%d",&'+str(var_name)+');\n'
+			if type == 'float':
+				newLine += 'float '+str(var_name)+';\n  '
+				newLine += 'scanf("%f",&'+str(var_name)+');\n'
 		
 	elif line != '':
 		newLine += line + ';\n'
@@ -196,7 +218,7 @@ if __name__=="__main__":
 	for line in f1.readlines():
 		f2.write(convert(line)+'\n')
 
-	f2.write("return(0);\n}\n")
+	f2.write("  return(0);\n}\n")
 
 	#closing both files...
 	f1.close()
