@@ -54,22 +54,47 @@ def convert(line):
         lhs, rhs = line.split('=')
         lhs = lhs.strip()
         rhs = rhs.strip()
-        type = getType(rhs)
-        if type == 'int':
-            newLine += 'int '+str(lhs)+'='+str(rhs)+';\n'
-        elif type == 'float':
-            newLine += 'float '+str(lhs)+'='+str(rhs)+';\n'
-        elif type == 'char':
-            newLine += 'char '+str(lhs)+'='+str(rhs)+';\n'
-        elif type == 'string':
-            newLine += 'char '+str(lhs)+'['+str(len(rhs)-2)+']='+str(rhs)+';\n'
-        elif type == 'int list':
-            newLine += 'int '+str(lhs)+'['+str(len(rhs)/2)+']={'
-            newLine += rhs[1:-1]+'};\n'
+        
+        if rhs not in variables:
+            type = getType(rhs)
+            if type == 'int':
+                newLine += 'int '+str(lhs)+'='+str(rhs)+';\n'
+            elif type == 'float':
+                newLine += 'float '+str(lhs)+'='+str(rhs)+';\n'
+            elif type == 'char':
+                newLine += 'char '+str(lhs)+'='+str(rhs)+';\n'
+            elif type == 'string':
+                newLine += 'char '+str(lhs)+'['+str(len(rhs)-2)+']='+str(rhs)+';\n'
+            elif type == 'int list':
+                newLine += 'int '+str(lhs)+'['+str(len(rhs)/2)+']={'
+                newLine += rhs[1:-1]+'};\n'
 
-        elif type == 'float list':
-            newLine += 'float '+str(lhs)+'['+str(len(rhs)/2)+']={'
-            newLine += rhs[1:-1]+'};\n'
+            elif type == 'float list':
+                newLine += 'float '+str(lhs)+'['+str(len(rhs)/2)+']={'
+                newLine += rhs[1:-1]+'};\n'
+
+        else:
+            type = variables[rhs]
+            if type == 'int':
+                newLine += 'int '+str(lhs)+'='+str(rhs)+';\n'
+            elif type == 'float':
+                newLine += 'float '+str(lhs)+'='+str(rhs)+';\n'
+            elif type == 'char':
+                newLine += 'char '+str(lhs)+'='+str(rhs)+';\n'
+            elif type == 'string':
+                newLine += 'char '+str(lhs)+'[100];\n'
+                newLine += '  for(int i=0;i<100;i++) '
+                newLine += str(lhs)+'[i]='+str(rhs)+'[i];\n'
+            elif type == 'int list':
+                newLine += 'int '+str(lhs)+'[100];\n'
+                newLine += '  for(int i=0;i<100;i++) '
+                newLine += str(lhs)+'[i]='+str(rhs)+'[i];\n'
+
+            elif type == 'float list':
+                newLine += 'float '+str(lhs)+'[100];\n'
+                newLine += '  for(int i=0;i<100;i++) '
+                newLine += str(lhs)+'[i]='+str(rhs)+'[i];\n'
+        
         variables[lhs] = type
 
     elif 'elif' in line:
